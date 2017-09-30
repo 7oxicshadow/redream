@@ -25,6 +25,9 @@ DEFINE_PERSISTENT_OPTION_INT(fullscreen, 0, "Start window fullscreen");
 #define VIDEO_DEFAULT_HEIGHT 480
 #define INPUT_MAX_CONTROLLERS 4
 
+DEFINE_PERSISTENT_OPTION_INT(v_width, VIDEO_DEFAULT_WIDTH, "Video Width");
+DEFINE_PERSISTENT_OPTION_INT(v_height, VIDEO_DEFAULT_HEIGHT, "Video Height");
+
 #define AUDIO_FRAME_SIZE 4 /* stereo / pcm16 */
 #define AUDIO_FRAMES_TO_MS(frames) \
   (int)(((float)frames * 1000.0f) / (float)AUDIO_FREQ)
@@ -34,6 +37,8 @@ DEFINE_PERSISTENT_OPTION_INT(fullscreen, 0, "Start window fullscreen");
 struct host {
   struct SDL_Window *win;
   int closed;
+  int video_width;
+  int video_height;
 
   struct emu *emu;
   struct tracer *tracer;
@@ -746,8 +751,8 @@ static int host_init(struct host *host) {
   }
 
   host->win = SDL_CreateWindow("redream", SDL_WINDOWPOS_UNDEFINED,
-                               SDL_WINDOWPOS_UNDEFINED, VIDEO_DEFAULT_WIDTH,
-                               VIDEO_DEFAULT_HEIGHT, win_flags);
+                               SDL_WINDOWPOS_UNDEFINED, OPTION_v_width,
+                               OPTION_v_height, win_flags);
   CHECK_NOTNULL(host->win, "host_create window creation failed: %s",
                 SDL_GetError());
 
